@@ -25,7 +25,7 @@ import (
 	"k8s.io/klog/v2"
 
 	"github.com/GoogleCloudPlatform/k8s-cloud-provider/pkg/cloud"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 // LoadBalancerType defines a specific type for holding load balancer types (eg. Internal)
@@ -42,6 +42,9 @@ const (
 
 	// LBTypeInternal is the constant for the official internal type.
 	LBTypeInternal LoadBalancerType = "Internal"
+
+	// LBTypeInternal is the constant for the official internal type.
+	LBTypeExternal LoadBalancerType = "External"
 
 	// Deprecating the lowercase spelling of Internal.
 	deprecatedTypeInternalLowerCase LoadBalancerType = "internal"
@@ -99,8 +102,10 @@ func GetLoadBalancerAnnotationType(service *v1.Service) LoadBalancerType {
 	switch lbType {
 	case LBTypeInternal, deprecatedTypeInternalLowerCase:
 		return LBTypeInternal
-	default:
+	case LBTypeExternal:
 		return lbType
+	default:
+		return LBTypeInternal
 	}
 }
 
